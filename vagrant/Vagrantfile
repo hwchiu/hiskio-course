@@ -21,6 +21,12 @@ Vagrant.configure("2") do |config|
     sudo apt-get update
     sudo apt-get install -y docker-ce=${DOCKER_VERSION}
 
+    #Disable swap
+    #https://github.com/kubernetes/kubernetes/issues/53533
+    sudo swapoff -a && sudo sysctl -w vm.swappiness=0
+    sudo sed '/swap.img/d' -i /etc/fstab
+
+
   SHELL
 
   config.vm.network :private_network, ip: "172.17.8.111"
