@@ -27,6 +27,7 @@ Vagrant.configure("2") do |config|
     sudo swapoff -a && sudo sysctl -w vm.swappiness=0
     sudo sed '/vagrant--vg-swap/d' -i /etc/fstab
 
+    git clone https://github.com/hwchiu/hiskio-course.git
   SHELL
 
   config.vm.network :private_network, ip: "172.17.8.111"
