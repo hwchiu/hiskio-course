@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: two-containers
+  labels:
+    app: myapp
+spec:
+  containers:
+  - name: client
+    image: hwchiu/netutils
+  - name: www-server
+    image: nginx
