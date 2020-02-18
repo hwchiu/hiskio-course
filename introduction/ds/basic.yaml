@@ -13,6 +13,9 @@ spec:
       labels:
         app: nginx
     spec:
+#      tolerations:
+#      - key: node-role.kubernetes.io/master
+#        effect: NoSchedule
       containers:
       - name: nginx-server
         image: nginx
