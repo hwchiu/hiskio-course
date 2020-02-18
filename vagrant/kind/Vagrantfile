@@ -36,10 +36,11 @@ Vagrant.configure("2") do |config|
     sudo apt-get install -y kubectl
 
     curl -Lo ./kind "https://github.com/kubernetes-sigs/kind/releases/download/v0.7.0/kind-$(uname)-amd64"
-    chmod +x ./kind
-    mv ./kind /usr/local/bin/kind
+    chmod a+x ./kind
+    sudo mv ./kind /usr/local/bin/kind
 
-    ./kind create cluster --config hiskio-course/vagrant/kind.yaml
+    sudo kind create cluster --config hiskio-course/vagrant/kind.yaml
+    sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
     echo 'source <(kubectl completion bash)' >>~/.bashrc
   SHELL
