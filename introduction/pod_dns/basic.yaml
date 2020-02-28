@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: default
+  labels:
+    app: myapp
+spec:
+  containers:
+  - name: default
+    image: hwchiu/netutils
+  dnsPolicy: Default
