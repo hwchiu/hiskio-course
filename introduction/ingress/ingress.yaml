@@ -9,11 +9,11 @@ spec:
   - host: test.com
     http:
       paths:
-      - path: /v1
+      - path: /v1/
         backend:
           serviceName: hellok8s
           servicePort: 80
-      - path: /v2
+      - path: /v2/
         backend:
           serviceName: httpd
           servicePort: 80
