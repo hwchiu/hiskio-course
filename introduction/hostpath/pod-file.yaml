@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hostpath-file
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: debug-env
+  template:
+    metadata:
+      labels:
+        app: debug-env
+    spec:
+      containers:
+      - name: debug-server
+        image: hwchiu/netutils
+        volumeMounts:
+        - mountPath: /my-data
+          name: test-hostpath
+      volumes:
+      - name: test-hostpath
+        hostPath:
+          path: /tmp/data
+          type: FileOrCreate
+
