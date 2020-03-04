@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: config-env
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: debug-env
+  template:
+    metadata:
+      labels:
+        app: debug-env
+    spec:
+      containers:
+      - name: debug-server
+        image: hwchiu/netutils
+        env:
+        - name: test_key
+          valueFrom:
+            configMapKeyRef:
+              name: config-test
+              key: key
+        - name: version
+          valueFrom:
+            configMapKeyRef:
+              name: config-test
+              key: version.date

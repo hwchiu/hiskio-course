@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: config-vol
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: debug-vol
+  template:
+    metadata:
+      labels:
+        app: debug-vol
+    spec:
+      containers:
+      - name: debug-server
+        image: hwchiu/netutils
+        volumeMounts:
+        - name: config-volume
+          mountPath: /tmp/config
+      volumes:
+      - name: config-volume
+        configMap:
+          name: config-test
