@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: sts-pv
+  labels:
+    app: debug
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: debug
+  serviceName: "debug"
+  template:
+    metadata:
+      labels:
+        app: debug
+    spec:
+      containers:
+      - name: debug-server
+        image: hwchiu/netutils
+        volumeMounts:
+        - mountPath: /test
+          name: data-pvc 
+  volumeClaimTemplates:
+  - metadata:
+      name: data-pvc
+    spec:
+      storageClassName: ""
+      accessModes: 
+        - ReadWriteMany
+      resources:
+        requests:
+          storage: 50Mi
+  

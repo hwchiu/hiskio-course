@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfs-a
+spec:
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  nfs:
+    server: 172.18.0.1
+    path: /nfsshare/sts-a
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfs-b
+spec:
+  capacity:
+    storage: 1000Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  nfs:
+    server: 172.18.0.1
+    path: /nfsshare/sts-b
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfs-c
+spec:
+  capacity:
+    storage: 1000Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  nfs:
+    server: 172.18.0.1
+    path: /nfsshare/sts-c
