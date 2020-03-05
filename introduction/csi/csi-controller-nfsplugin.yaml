@@ -4,12 +4,12 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: csi-attacher-nfsplugin
+  name: csi-controller-nfsplugin
   labels:
-    app: csi-attacher-nfsplugin
+    app: csi-controller-nfsplugin
 spec:
   selector:
-    app: csi-attacher-nfsplugin
+    app: csi-controller-nfsplugin
   ports:
     - name: dummy
       port: 12345
@@ -18,17 +18,17 @@ spec:
 kind: StatefulSet
 apiVersion: apps/v1
 metadata:
-  name: csi-attacher-nfsplugin
+  name: csi-controller-nfsplugin
 spec:
   serviceName: "csi-attacher"
   replicas: 1
   selector:
     matchLabels:
-      app: csi-attacher-nfsplugin
+      app: csi-controller-nfsplugin
   template:
     metadata:
       labels:
-        app: csi-attacher-nfsplugin
+        app: csi-controller-nfsplugin
     spec:
       serviceAccount: csi-attacher
       containers:
