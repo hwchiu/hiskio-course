@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nfs-dir
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: debug-env
+  template:
+    metadata:
+      labels:
+        app: debug-env
+    spec:
+      containers:
+      - name: debug-server
+        image: hwchiu/netutils
+        volumeMounts:
+        - mountPath: /test
+          name: test-nfs
+      volumes:
+      - name: test-nfs
+        nfs:
+          server: 172.18.0.1
+          path: "/nfsshare"

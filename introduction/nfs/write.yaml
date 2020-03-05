@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nfs-write
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: debug-env
+  template:
+    metadata:
+      labels:
+        app: debug-env
+    spec:
+      containers:
+      - name: debug-server
+        image: hwchiu/netutils
+        volumeMounts:
+        - mountPath: /test
+          name: test-nfs
+        command: ["/bin/bash"]
+        args: ["-c", "while true; do echo $HOSTNAME >> /test/data ;sleep $[($RANDOM%5)+1]s; done"]
+      volumes:
+      - name: test-nfs
+        nfs:
+          server: 172.18.0.1
+          path: "/nfsshare"
