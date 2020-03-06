@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pv-debug-server 
+spec:
+  containers:
+  - image: hwchiu/netutils
+    imagePullPolicy: Always
+    name: debug-server
+    volumeMounts:
+      - mountPath: /test
+        name: data-pvc 
+  volumes:
+  - name: data-pvc
+    persistentVolumeClaim:
+      claimName: pvc-nfs
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: pvc-nfs
+spec:
+  storageClassName: "managed-nfs-storage"
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Mi
