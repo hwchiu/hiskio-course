@@ -1,0 +1,16 @@
+kind: Deployment
+metadata:
+  name: debug-pod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: debug-pod
+  template:
+    metadata:
+      labels:
+        app: debug-pod
+    spec:
+      containers:
+      - name: debug-pod
+        image: hwchiu/netutils:latest
