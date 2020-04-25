@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{.Chart.Name }}-debug-pod
+spec:
+  replicas: {{ .Values.debug.replicaCount }}
+  selector:
+    matchLabels:
+      app: debug-pod
+  template:
+    metadata:
+      labels:
+        app: debug-pod
+    spec:
+      containers:
+      - name: debug-pod
+        image: hwchiu/netutils:{{ .Values.debug.image.tag}}
+        imagePullPolicy: {{ .Values.debug.pullpolicy }}

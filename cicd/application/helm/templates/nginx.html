@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{.Chart.Name }}-nginx
+spec:
+  replicas: {{ .Values.nginx.replicaCount }}
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: hwchiu/cicd-app:{{ .Values.nginx.image.tag }}
+        ports:
+        - containerPort: 80
+        imagePullPolicy: {{ .Values.nginx.pullpolicy }}
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 3
+          periodSeconds: 3
+        env:
+        - name: PREFIX
+          value: {{ .Values.nginx.prefix }}
+        volumeMounts:
+        - name: index2-html
+          mountPath: /var/www/html/test/
+      volumes:
+      - name: index2-html
+        configMap:
+          name: {{.Chart.Name }}-index2
