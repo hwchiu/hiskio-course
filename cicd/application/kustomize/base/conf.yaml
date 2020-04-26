@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: index2
+  namespace: default
+data:
+  index2.html: |
+    cousre-testing file from ConfigMap
