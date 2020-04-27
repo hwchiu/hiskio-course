@@ -1,0 +1,11 @@
+namePrefix: prod-
+commonLabels:
+  owner: hwchiu
+bases:
+- ../../base
+patches:
+- replica_count.yaml
+configMapGenerator:
+- name: ks-config
+  files:
+  - test.config  
