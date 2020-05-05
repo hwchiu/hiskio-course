@@ -15,4 +15,4 @@ spec:
       containers:
       - name: debug-pod
         image: hwchiu/netutils:{{ .Values.debug.image.tag}}
-        imagePullPolicy: {{ .Values.debug.pullpolicy }}
+        imagePullPolicy: {{ .Values.debug.pullPolicy }}

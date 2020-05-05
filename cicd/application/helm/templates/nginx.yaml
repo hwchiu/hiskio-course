@@ -17,7 +17,7 @@ spec:
         image: hwchiu/cicd-app:{{ .Values.nginx.image.tag }}
         ports:
         - containerPort: 80
-        imagePullPolicy: {{ .Values.nginx.pullpolicy }}
+        imagePullPolicy: {{ .Values.nginx.pullPolicy }}
         livenessProbe:
           httpGet:
             path: /
