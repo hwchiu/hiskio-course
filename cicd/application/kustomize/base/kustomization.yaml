@@ -1,5 +1,5 @@
 resources:
-- conf.yaml
-- debug.yaml
-- service.yaml
-- nginx.yaml
+  - conf.yaml
+  - debug.yaml
+  - service.yaml
+  - nginx.yaml

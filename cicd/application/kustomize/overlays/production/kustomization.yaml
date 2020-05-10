@@ -2,10 +2,10 @@ namePrefix: prod-
 commonLabels:
   owner: hwchiu
 bases:
-- ../../base
+  - ../../base
 patches:
-- replica_count.yaml
+  - replica_count.yaml
 configMapGenerator:
-- name: ks-config
-  files:
-  - test.config  
+  - name: ks-config
+    files:
+      - test.config
