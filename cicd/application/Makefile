@@ -13,3 +13,10 @@ build-image:
 push-image: build-image
 	docker image push ${SERVER}${REPO}:${VERSION}
 	docker image push ${SERVER}${REPO}:latest
+
+test:
+	docker run --rm -i hadolint/hadolint < Dockerfile;
+	shellcheck entrypoint.sh
+	yamllint yamls/
+	yamllint kustomize/
+
