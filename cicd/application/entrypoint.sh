@@ -5,6 +5,8 @@ COMMITHASH="${COMMITHASH:- }"
 COMMITLOG="${COMMITLOG:- }"
 IPS=$(hostname -I)
 
+
+'
 cat <<EOF > /var/www/html/index.html
 Hostname is ${PREFIX}_${HOSTNAME}
 Latest Commit Hash is ${PREFIX}_${COMMITHASH}
