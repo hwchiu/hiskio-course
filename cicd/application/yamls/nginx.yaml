@@ -17,13 +17,13 @@ spec:
           image: hwchiu/cicd-app:latest
           ports:
             - containerPort: 80
-              imagePullPolicy: Always
-              livenessProbe:
-              httpGet:
-                path: /
-                port: 80
-              initialDelaySeconds: 3
-              periodSeconds: 3
+          imagePullPolicy: Always
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 3
+            periodSeconds: 3
           env:
             - name: PREFIX
               value: ch1
