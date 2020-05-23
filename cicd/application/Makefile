@@ -5,6 +5,7 @@ REPO    ?=hwchiu/cicd-app
 COMMIT  =${shell git rev-parse --short HEAD}
 LOG     ="${shell git log -1 --pretty=%B}"
 VERSION ?=${COMMIT}
+TYPE    ?=KIND
 
 build-image:
 	docker build --build-arg HASH=${COMMIT} --build-arg LOG=${LOG} --tag ${SERVER}${REPO}:${VERSION} .
@@ -28,3 +29,13 @@ shellcheck:
 	shellcheck entrypoint.sh
 
 test: shellcheck docker-lint yaml-lint
+
+
+k8s-yaml:
+	@echo "---------kubectl dry-run -----------"
+	kubectl --dry-run=server apply -f yamls/
+bats:
+	@echo "---------bats check-----------"
+	sudo TYPE=${TYPE} bats -t tests/test.bats
+
+k8s-test: bats k8s-yaml
