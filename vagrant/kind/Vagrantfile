@@ -50,8 +50,10 @@ Vagrant.configure("2") do |config|
     KREW=./krew-"$(uname | tr '[:upper:]' '[:lower:]')_amd64" &&
     "$KREW" install --manifest=krew.yaml --archive=krew.tar.gz &&
     "$KREW" update
-
     echo 'export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"' >> ~/.bashrc
+
+    git clone --depth=1 https://github.com/Bash-it/bash-it.git ~/.bash_it
+    bash ~/.bash_it/install.sh -s
   SHELL
 
   config.vm.network :private_network, ip: "172.17.8.111"
