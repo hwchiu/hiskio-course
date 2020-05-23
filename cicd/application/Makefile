@@ -37,6 +37,7 @@ native:
 
 helm:
 	@echo "---------helm yaml check -----------"
+	helm install --dry-run --debug test helm
 	helm template helm | kubectl apply --dry-run=server -f -
 
 kustomize:
