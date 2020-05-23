@@ -1,4 +1,4 @@
-PHONY: build-image push-image
+.PHONY: build-image push-image helm kustomize native
 
 SERVER  =
 REPO    ?=hwchiu/cicd-app
@@ -31,9 +31,25 @@ shellcheck:
 test: shellcheck docker-lint yaml-lint
 
 
-k8s-yaml:
-	@echo "---------kubectl dry-run -----------"
+native:
+	@echo "---------kubectl yaml check -----------"
 	kubectl --dry-run=server apply -f yamls/
+
+helm:
+	@echo "---------helm yaml check -----------"
+	helm template helm | kubectl apply --dry-run=server -f -
+
+kustomize:
+	@echo "---------kustomize yaml check -----------"
+	@echo "--------- base -----------"
+	kubectl --dry-run=server apply -k kustomize/base/
+	@echo "--------- production -----------"
+	kubectl --dry-run=server apply -k kustomize/overlays/production/
+	@echo "--------- staging -----------"
+	kubectl --dry-run=server apply -k kustomize/overlays/staging/
+
+k8s-yaml: native helm kustomize
+
 bats:
 	@echo "---------bats check-----------"
 	sudo TYPE=${TYPE} bats -t tests/test.bats
