@@ -55,4 +55,4 @@ bats:
 	@echo "---------bats check-----------"
 	sudo TYPE=${TYPE} bats -t tests/test.bats
 
-k8s-test: bats k8s-yaml
+k8s-test: k8s-yaml  bats
