@@ -68,7 +68,7 @@ jobs:
     - name: Wait Nginx Deployment
       run: |
         #timeout 120(5*24) sec
-        WAIT_TIME=0 ;until [ $WAIT_TIME -eq 24 ] || [ "3" = "$(kubectl get deployment nginx -ojsonpath='{.status.readyReplicas}')" ]; do echo "sleep"; sleep 5; done
+        WAIT_TIME=0 ;until [ $WAIT_TIME -eq 24 ] || [ "3" = "$(kubectl get deployment nginx -ojsonpath='{.status.readyReplicas}')" ]; do echo "sleep ${WAIT_TIME}"; sleep 5; WAIT_TIME=$((WAIT_TIME+1)); done
 
     - name: Run Bats
       run: |
@@ -110,7 +110,7 @@ jobs:
     - name: Wait Nginx Deployment
       run: |
         #timeout 120(5*24) sec
-        WAIT_TIME=0 ;until [ $WAIT_TIME -eq 24 ] || [ "3" = "$(kubectl get deployment nginx -ojsonpath='{.status.readyReplicas}')" ]; do echo "sleep"; sleep 5; done
+        WAIT_TIME=0 ;until [ $WAIT_TIME -eq 24 ] || [ "3" = "$(kubectl get deployment nginx -ojsonpath='{.status.readyReplicas}')" ]; do echo "sleep ${WAIT_TIME}"; sleep 5; WAIT_TIME=$((WAIT_TIME+1)); done
 
     - name: Run Bats
       run: |
