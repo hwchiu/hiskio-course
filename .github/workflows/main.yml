@@ -3,7 +3,7 @@ name: CI
 on:
   push:
     branches:
-      - master
+      - 'github-master'
   pull_request:
     branches:
       - '*'
@@ -78,42 +78,20 @@ jobs:
 
   test-k8s-kind:
     runs-on: ubuntu-latest
-    needs: test
+    needs: test-k8s-minikube
     steps:
     - uses: actions/checkout@v2
-
-    - name: Install KIND
-      run: |
-        curl -Lo ./kind "https://github.com/kubernetes-sigs/kind/releases/download/v0.7.0/kind-$(uname)-amd64"
-        chmod +x ./kind
-        sudo mv ./kind /usr/local/bin
-
-    - uses: azure/setup-kubectl@v1
-
-    - name: Install kubernetes
-      run: |
-        sudo kind create cluster --config vagrant/kind.yaml
-        sudo chown $(id -u):$(id -g) $HOME/.kube/config
-
-    - name: Install bats
-      run: |
-        git clone https://github.com/bats-core/bats-core.git
-        cd bats-core/
-        sudo ./install.sh /usr/local
-
-    - name: Deploy K8S Yaml
+    - name: Build image
       run: |
         pushd cicd/application
-        kubectl apply -f yamls
+        make build-image
         popd
-
-    - name: Wait Nginx Deployment
+    - name: Docker login
       run: |
-        #timeout 120(5*24) sec
-        WAIT_TIME=0 ;until [ $WAIT_TIME -eq 24 ] || [ "3" = "$(kubectl get deployment nginx -ojsonpath='{.status.readyReplicas}')" ]; do echo "sleep ${WAIT_TIME}"; sleep 5; WAIT_TIME=$((WAIT_TIME+1)); done
-
-    - name: Run Bats
+        docker login -u ${{ secrets.dockerUsername }} -p  ${{ secrets.dockerPassword}}
+    - name: Push image
       run: |
         pushd cicd/application
-        make k8s-test
+        make push-image
         popd
+    - uses: azure/setup-helm@v1

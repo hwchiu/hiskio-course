@@ -7,6 +7,9 @@ LOG     ="${shell git log -1 --pretty=%B}"
 VERSION ?=${COMMIT}
 TYPE    ?=KIND
 
+tag-image:
+	@echo ${VERSION}
+
 build-image:
 	docker build --build-arg HASH=${COMMIT} --build-arg LOG=${LOG} --tag ${SERVER}${REPO}:${VERSION} .
 	docker image tag ${SERVER}${REPO}:${VERSION} ${SERVER}${REPO}:latest
