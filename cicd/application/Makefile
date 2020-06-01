@@ -13,7 +13,7 @@ build-image:
 
 push-image: build-image
 	docker image push ${SERVER}${REPO}:${VERSION}
-	docker image push ${SERVER}${REPO}:latest
+#	docker image push ${SERVER}${REPO}:latest
 
 yaml-lint:
 	@echo "---------yamllint----------"
