@@ -2,5 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nginx
+  annotations:
+    keel.sh/policy: "glob:*-staging"
+    keel.sh/trigger: poll
 spec:
   replicas: 1

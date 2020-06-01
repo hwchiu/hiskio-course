@@ -2,6 +2,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nginx
+  annotations:
+    keel.sh/policy: "regexp:^([a-zA-Z0-9]{7}$)"
+    keel.sh/trigger: poll
 spec:
   replicas: 3
   selector:

@@ -14,3 +14,10 @@ debug:
   image:
     tag: latest
   pullPolicy: Always
+
+keel:
+  # keel policy (all/major/minor/patch/force)
+  policy: all
+  images:
+    - repository: hwchiu/cicd-app
+      tag: nginx.image.tag
