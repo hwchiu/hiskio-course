@@ -97,5 +97,5 @@ jobs:
       run: |
         pushd cicd/application
         tag=$(make tag-image)
-        helm upgrade --install --create-namespace -n staging --set nginx.image.tag=${tag} github-dev helm/
+        helm upgrade --install --create-namespace -n dev --set nginx.image.tag=${tag} app-example helm/
         popd
