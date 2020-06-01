@@ -3,7 +3,7 @@ name: dev
 on:
   pull_request:
     branches:
-      - 'github-master'
+      - '*'
 
 jobs:
   test:
