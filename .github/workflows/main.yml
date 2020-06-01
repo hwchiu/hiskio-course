@@ -78,15 +78,10 @@ jobs:
     needs: test-k8s-minikube
     steps:
     - uses: actions/checkout@v2
-    - name: Build image
-      run: |
-        pushd cicd/application
-        make build-image
-        popd
     - name: Docker login
       run: |
         docker login -u ${{ secrets.dockerUsername }} -p  ${{ secrets.dockerPassword}}
-    - name: Push image
+    - name: Build/Push image
       run: |
         pushd cicd/application
         make push-image
