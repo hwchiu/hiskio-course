@@ -76,7 +76,7 @@ jobs:
         make TYPE=minikube k8s-test
         popd
 
-  test-k8s-kind:
+  deploy-dev:
     runs-on: ubuntu-latest
     needs: test-k8s-minikube
     steps:
@@ -95,3 +95,14 @@ jobs:
         make push-image
         popd
     - uses: azure/setup-helm@v1
+      with:
+        version: 3.2.0
+    - name: Prepare Kubectl
+      run: |
+        echo ${{ secrets.KUBECONFIG }} | base64 -D > ~/.kube/config
+    - name: Deploy Helm
+      run: |
+        pushd cicd/application
+        tag=$(make tag-image)
+        helm upgrade --install --create-namespace -n dev --set nginx.image.tag=${tag} github-dev helm/
+        popd
