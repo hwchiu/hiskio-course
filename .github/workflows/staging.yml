@@ -73,7 +73,7 @@ jobs:
         make TYPE=minikube k8s-test
         popd
 
-  deploy-dev:
+  deploy-staging:
     runs-on: ubuntu-latest
     needs: test-k8s-minikube
     steps:
