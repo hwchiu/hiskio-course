@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: nginx
   annotations:
-    keel.sh/policy: "regexp:^([a-zA-Z0-9]{7}$)"
+    keel.sh/policy: force
     keel.sh/trigger: poll
 spec:
   replicas: 3

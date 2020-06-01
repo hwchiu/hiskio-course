@@ -5,5 +5,14 @@ metadata:
   annotations:
     keel.sh/policy: major
     keel.sh/trigger: poll
+    keel.sh/pollSchedule: "@every 1m"
 spec:
   replicas: 5
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+        - name: nginx
+          image: hwchiu/cicd-app:1.2.3
