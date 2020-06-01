@@ -1,0 +1,74 @@
+name: dev
+
+on:
+  pull_request:
+    branches:
+      - 'github-master'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install required packages
+      run: sudo apt-get install -f yamllint shellcheck
+
+    - name: Run shell check
+      run: |
+        pushd cicd/application
+        make shellcheck
+        popd
+
+    - name: Run shell check
+      run: |
+        pushd cicd/application
+        make docker-lint
+        popd
+
+    - name: Run shell check
+      run: |
+        pushd cicd/application
+        make yaml-lint
+        popd
+  test-k8s-minikube:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install minikube
+      run: |
+        curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+        chmod +x minikube
+        sudo mv ./minikube /usr/local/bin
+
+    - uses: azure/setup-kubectl@v1
+
+    - name: Install kubernetes
+      run:
+        minikube start --driver=docker
+
+    - name: Install bats
+      run: |
+        git clone https://github.com/bats-core/bats-core.git
+        cd bats-core/
+        sudo ./install.sh /usr/local
+
+    - name: Deploy K8S Yaml
+      run: |
+        pushd cicd/application
+        kubectl apply -f yamls
+        popd
+
+    - name: Wait Nginx Deployment
+      run: |
+        #timeout 120(5*24) sec
+        WAIT_TIME=0 ;until [ $WAIT_TIME -eq 24 ] || [ "3" = "$(kubectl get deployment nginx -ojsonpath='{.status.readyReplicas}')" ]; do echo "sleep ${WAIT_TIME}"; sleep 5; WAIT_TIME=$((WAIT_TIME+1)); done
+
+    - name: Run Bats
+      run: |
+        pushd cicd/application
+        make TYPE=minikube k8s-test
+        popd
