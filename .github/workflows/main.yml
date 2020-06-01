@@ -100,7 +100,7 @@ jobs:
     - name: Prepare Kubectl
       run: |
         mkdir -p ~/.kube
-        echo ${{ secrets.KUBECONFIG }} | base64 -D > ~/.kube/config
+        echo ${{ secrets.KUBECONFIG }} | base64 -d > ~/.kube/config
     - name: Deploy Helm
       run: |
         pushd cicd/application
