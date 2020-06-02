@@ -5,6 +5,7 @@ metadata:
   annotations:
     keel.sh/policy: force
     keel.sh/trigger: poll
+    keel.sh/match-tag: "true"
 spec:
   replicas: 3
   selector:

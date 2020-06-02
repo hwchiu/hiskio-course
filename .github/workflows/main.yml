@@ -77,5 +77,5 @@ jobs:
     - name: Build/Push image
       run: |
         pushd cicd/application
-        make OTHER=dev push-image
+        make VERSION=latest OTHER=dev push-image
         popd
