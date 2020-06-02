@@ -15,4 +15,4 @@ spec:
     spec:
       containers:
         - name: nginx
-          image: hwchiu/cicd-app:1.2.3
+          image: hwchiu/cicd-app:1.2.6
