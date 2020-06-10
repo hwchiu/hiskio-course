@@ -5,7 +5,7 @@
 nginx:
   replicaCount: 3
   image:
-    tag: v1.1.0-staging
+    tag: v1.1.9-staging
   pullPolicy: Always
   prefix: test
 
