@@ -2,7 +2,7 @@ apiVersion: bitnami.com/v1alpha1
 kind: SealedSecret
 metadata:
   creationTimestamp: null
-  name: mysecret
+  name: {{.Chart.Name }}-index2
   namespace: default
 spec:
   encryptedData:
