@@ -11,6 +11,6 @@ spec:
   template:
     metadata:
       creationTimestamp: null
-      name: mysecret
+      name: {{.Chart.Name }}-index2
       namespace: default
     type: Opaque
