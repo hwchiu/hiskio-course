@@ -4,6 +4,8 @@ metadata:
   creationTimestamp: null
   name: {{.Chart.Name }}-index2
   namespace: default
+  annotations:
+    sealedsecrets.bitnami.com/cluster-wide: "true"
 spec:
   encryptedData:
     password: AgBEOIjeZfH/CWhKcmAK78zYeUT8pQjGioBcbJQbVd7L8rFuaHPxjJ2YsMgFeMlPtDIgdYf+s+HTeRVIWnELYycMIxoJzEX9HjRLsz9uV6CPrXy8vgu3Xh35LSRfqjM1egOe9F+RHq9zZpCqKUtuKDKG7J/F5bmF0QFkFNH/Dfxj6RRTF+mYiODE7ycuBQtSQVYg5itU7VhUpk1RxRbeBG25kklNIphayb8Rt9Dx1BkKH6VqbSy6Lc20zXzUhTybl4AdSm3GZVpZDEeMnyS9uuT7bfgIytX0g8nG72z5cW/7ht4iDlKLseHLGYFTIkesDCZPJnoXkmgWX3/u5djUZJYb5+nVfamd0FfnWU7N4T7XH7kD7K8Fm6eW1lYv23Q1ZxjqMql6qbPj3RAitSmgF+3oJJq+FVX0S/ycisEh5CKqeoKPo76idBpLimsAmksLO8QtgYHm3cDwsjxW50ROicEjhKlf5/ncWAyVFrExkQqWFZvT2fBY4F0k6BcOj1Y4FYvOp/r8+0tpQuCJ/AUt0fuQpSfTM3tRi8pEp8FjtIYzsoyE36ib8qc23mHyJ0hD1GHyuSYhShBHAU6Hxo/ZdLSJBU9g1sIsYaCUNEoyLP1V4n1NME+pl9ntlToW3U4lkX3WYmhIrSFn+Tk72XAJkbWNM+yKG+QL0T1p067aWzik3XkvuHh6qKqQWietjrWWkvAVPanVfqIp4O5gwvU=
