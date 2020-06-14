@@ -45,6 +45,9 @@ jobs:
     - name: Install kubernetes
       run:
         minikube start --driver=docker
+    - name: Install kubeseal
+      run:
+        kubectl apply -f https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.12.4/controller.yaml
 
     - name: Install bats
       run: |
