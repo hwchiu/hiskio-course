@@ -2,16 +2,12 @@ name: CI
 
 on:
   push:
-    branches:
-      - master
-  pull_request:
-    branches:
-      - '*'
+    tags:
+      - '*'    
 
 jobs:
   test:
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
 
@@ -23,13 +19,11 @@ jobs:
         pushd cicd/application
         make shellcheck
         popd
-
     - name: Run shell check
       run: |
         pushd cicd/application
         make docker-lint
         popd
-
     - name: Run shell check
       run: |
         pushd cicd/application
@@ -46,7 +40,6 @@ jobs:
         curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
         chmod +x minikube
         sudo mv ./minikube /usr/local/bin
-
     - uses: azure/setup-kubectl@v1
 
     - name: Install kubernetes
@@ -58,62 +51,32 @@ jobs:
         git clone https://github.com/bats-core/bats-core.git
         cd bats-core/
         sudo ./install.sh /usr/local
-
     - name: Deploy K8S Yaml
       run: |
         pushd cicd/application
         kubectl apply -f yamls
         popd
-
     - name: Wait Nginx Deployment
       run: |
         #timeout 120(5*24) sec
         WAIT_TIME=0 ;until [ $WAIT_TIME -eq 24 ] || [ "3" = "$(kubectl get deployment nginx -ojsonpath='{.status.readyReplicas}')" ]; do echo "sleep ${WAIT_TIME}"; sleep 5; WAIT_TIME=$((WAIT_TIME+1)); done
-
     - name: Run Bats
       run: |
         pushd cicd/application
         make TYPE=minikube k8s-test
         popd
-
-  test-k8s-kind:
+  build-image:
     runs-on: ubuntu-latest
     needs: test
     steps:
     - uses: actions/checkout@v2
-
-    - name: Install KIND
+    - name: Set env
+      run: echo ::set-env name=RELEASE_VERSION::${GITHUB_REF#refs/*/}
+    - name: Docker login
       run: |
-        curl -Lo ./kind "https://github.com/kubernetes-sigs/kind/releases/download/v0.7.0/kind-$(uname)-amd64"
-        chmod +x ./kind
-        sudo mv ./kind /usr/local/bin
-
-    - uses: azure/setup-kubectl@v1
-
-    - name: Install kubernetes
-      run: |
-        sudo kind create cluster --config vagrant/kind.yaml
-        sudo chown $(id -u):$(id -g) $HOME/.kube/config
-
-    - name: Install bats
-      run: |
-        git clone https://github.com/bats-core/bats-core.git
-        cd bats-core/
-        sudo ./install.sh /usr/local
-
-    - name: Deploy K8S Yaml
+        docker login -u ${{ secrets.dockerUsername }} -p  ${{ secrets.dockerPassword}}
+    - name: Build/Push image
       run: |
         pushd cicd/application
-        kubectl apply -f yamls
-        popd
-
-    - name: Wait Nginx Deployment
-      run: |
-        #timeout 120(5*24) sec
-        WAIT_TIME=0 ;until [ $WAIT_TIME -eq 24 ] || [ "3" = "$(kubectl get deployment nginx -ojsonpath='{.status.readyReplicas}')" ]; do echo "sleep ${WAIT_TIME}"; sleep 5; WAIT_TIME=$((WAIT_TIME+1)); done
-
-    - name: Run Bats
-      run: |
-        pushd cicd/application
-        make k8s-test
+        make VERSION=${{ env.RELEASE_VERSION }} OTHER=${{ env.RELEASE_VERSION }} push-image
         popd

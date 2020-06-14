@@ -32,5 +32,5 @@ spec:
           mountPath: /var/www/html/test/
       volumes:
       - name: index2-html
-        configMap:
-          name: {{.Chart.Name }}-index2
+        secret:
+          secretName: {{.Chart.Name }}-index2

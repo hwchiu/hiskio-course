@@ -1,7 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: {{.Chart.Name }}-index2
-data:
-  index2.html: |
-    cousre-testing file from ConfigMap
