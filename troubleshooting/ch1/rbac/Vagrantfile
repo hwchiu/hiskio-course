@@ -14,6 +14,7 @@ Vagrant.configure("2") do |config|
     #change the source.list
     sudo apt-get update
     sudo apt-get install -y vim git cmake build-essential tcpdump tig jq socat bash-completion yamllint shellcheck
+    sudo snap install yq
     # Install Docker
     export DOCKER_VERSION="5:19.03.5~3-0~ubuntu-bionic"
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
@@ -39,7 +40,7 @@ Vagrant.configure("2") do |config|
     chmod a+x ./kind
     sudo mv ./kind /usr/local/bin/kind
 
-    sudo kind create cluster --config hiskio-course/troubleshooting/ch1/cluster-access/kind.yaml
+    sudo kind create cluster --config hiskio-course/troubleshooting/ch1/rbac/kind.yaml
     sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
     echo 'source <(kubectl completion bash)' >> ~/.bashrc
