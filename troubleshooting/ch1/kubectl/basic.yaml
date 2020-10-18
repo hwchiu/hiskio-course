@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test
+  labels:
+    app: debug-pod
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: debug-pod
+  template:
+    metadata:
+      labels:
+        app: debug-pod
+    spec:
+      containers:
+      - name: debug-pod-server
+        image: hwchiu/netutils
+      - name: nginx
+        image: nginx
