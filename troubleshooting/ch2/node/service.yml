@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: busybox
 spec:
-  replicas: 5
+  replicas: 120
   selector:
     matchLabels:
       app: busybox
@@ -15,3 +15,6 @@ spec:
       containers:
       - name: busybox
         image: busybox
+        commands:
+          - "/bin/sleep"
+          - "3600"
