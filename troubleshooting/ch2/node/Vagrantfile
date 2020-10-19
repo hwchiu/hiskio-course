@@ -1,0 +1,68 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "bento/ubuntu-18.04"
+  config.vm.box_version ='201912.14.0'
+  config.vm.hostname = 'k8s-dev'
+  config.vm.define vm_name = 'k8s'
+
+  config.vm.provision "shell", privileged: false, inline: <<-SHELL
+    set -e -x -u
+    export DEBIAN_FRONTEND=noninteractive
+
+    #change the source.list
+    sudo apt-get update
+    sudo apt-get install -y vim git cmake build-essential tcpdump tig jq socat bash-completion ipvsadm
+    sudo snap install yq
+    # Install Docker
+    export DOCKER_VERSION="5:19.03.5~3-0~ubuntu-bionic"
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+    sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+    sudo apt-get update
+    sudo apt-get install -y docker-ce=${DOCKER_VERSION}
+    sudo usermod -aG docker $USER
+
+    #Disable swap
+    #https://github.com/kubernetes/kubernetes/issues/53533
+    sudo swapoff -a && sudo sysctl -w vm.swappiness=0
+    sudo sed '/vagrant--vg-swap/d' -i /etc/fstab
+
+    git clone https://github.com/hwchiu/hiskio-course.git
+
+    export KUBE_VERSION="1.17.0"
+    sudo apt-get update && sudo apt-get install -y apt-transport-https curl
+    curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+    echo "deb http://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee --append /etc/apt/sources.list.d/kubernetes.list
+    sudo apt-get update
+    sudo apt-get install -y kubeadm=${KUBE_VERSION}-00 kubelet=${KUBE_VERSION}-00 kubectl=${KUBE_VERSION}-00
+
+    sudo kubeadm config images pull
+#    sudo kubeadm init --pod-network-cidr=10.244.0.0/16
+#    mkdir -p $HOME/.kube
+#    sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+#    sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+#    kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/2140ac876ef134e0ed5af15c65e414cf26827915/Documentation/kube-flannel.yml
+
+
+    curl -Lo ./kind "https://github.com/kubernetes-sigs/kind/releases/download/v0.7.0/kind-$(uname)-amd64"
+    chmod a+x ./kind
+    sudo mv ./kind /usr/local/bin/kind
+
+    sudo kind create cluster --config hiskio-course/troubleshooting/ch2/kubelet/kind.yaml
+    sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+    git clone --depth=1 https://github.com/Bash-it/bash-it.git ~/.bash_it
+    bash ~/.bash_it/install.sh -s
+
+    echo 'source <(kubectl completion bash)' >>~/.bashrc
+  SHELL
+
+  config.vm.network :private_network, ip: "172.17.8.112"
+  config.vm.provider :virtualbox do |v|
+      v.customize ["modifyvm", :id, "--cpus", 2]
+      v.customize ["modifyvm", :id, "--memory", 4096]
+      v.customize ['modifyvm', :id, '--nicpromisc1', 'allow-all']
+  end
+end
