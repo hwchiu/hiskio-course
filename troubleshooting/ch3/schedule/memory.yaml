@@ -19,5 +19,5 @@ spec:
       - name: deployment-memory-server
         image: hwchiu/netutils 
         resources:
-          requests:
+          limits:
             memory: "128Mi"

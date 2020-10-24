@@ -2,17 +2,15 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: deployment-anti
-  labels:
-    app: deployment
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: deployment
+      app: deployment-anti
   template:
     metadata:
       labels:
-        app: deployment
+        app: deployment-anti
     spec:
       affinity:
         podAntiAffinity:
