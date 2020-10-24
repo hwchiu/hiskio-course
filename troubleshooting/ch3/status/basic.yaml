@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crash-pod
+  labels:
+    app: crash-pod
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: crash-pod
+  template:
+    metadata:
+      labels:
+        app: crash-pod
+    spec:
+      containers:
+      - name: crash-pod-server
+        image: hwchiu/netutils

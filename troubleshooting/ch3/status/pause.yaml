@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pause-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pause-demo
+  template:
+    metadata:
+      labels:
+        app: pause-demo
+    spec:
+      containers:
+      - name: pause-demo-server
+        image: k8s.gcr.io/pause:3.1 
+        imagePullPolicy: Always

@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: signal-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: signal-demo
+  template:
+    metadata:
+      labels:
+        app: signal-demo
+    spec:
+      containers:
+      - name: signal-demo-server
+        image: hwchiu/netutils:signal
+        imagePullPolicy: Always
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: no-signal-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: no-signal-demo
+  template:
+    metadata:
+      labels:
+        app: no-signal-demo
+    spec:
+      containers:
+      - name: signal-demo-server
+        image: hwchiu/netutils:no-signal
+        imagePullPolicy: Always
