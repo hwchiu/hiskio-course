@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: ds-nodeselector
+  labels:
+    app: ds-nodeselector
+spec:
+  selector:
+    matchLabels:
+      app: ds-nodeselector
+  template:
+    metadata:
+      labels:
+        app: ds-nodeselector
+    spec:
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        effect: NoSchedule
+      containers:
+      - name: ds-nodeselector-server
+        image: hwchiu/netutils
+      nodeSelector:
+        demo: server        

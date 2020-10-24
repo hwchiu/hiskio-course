@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: ds-default
+  labels:
+    app: ds-default
+spec:
+  selector:
+    matchLabels:
+      app: ds-default
+  template:
+    metadata:
+      labels:
+        app: ds-default
+    spec:
+#      tolerations:
+#      - key: node-role.kubernetes.io/master
+#        effect: NoSchedule
+      containers:
+      - name: ds-default-server
+        image: hwchiu/netutils

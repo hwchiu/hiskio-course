@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-memory
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: deployment-memory
+  template:
+    metadata:
+      labels:
+        app: deployment-memory
+    spec:
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        effect: NoSchedule
+      containers:
+      - name: deployment-memory-server
+        image: hwchiu/netutils 
+        resources:
+          requests:
+            memory: "128Mi"

@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: ds-toleration
+  labels:
+    app: ds-toleration
+spec:
+  selector:
+    matchLabels:
+      app: ds-toleration
+  template:
+    metadata:
+      labels:
+        app: ds-toleration
+    spec:
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        effect: NoSchedule
+      containers:
+      - name: ds-toleration-server
+        image: hwchiu/netutils

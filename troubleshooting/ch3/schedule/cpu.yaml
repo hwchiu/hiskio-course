@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-cpu
+spec:
+  replicas: 12
+  selector:
+    matchLabels:
+      app: deployment-cpu
+  template:
+    metadata:
+      labels:
+        app: deployment-cpu
+    spec:
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        effect: NoSchedule
+      containers:
+      - name: deployment-cpu-server
+        image: hwchiu/netutils 
+        resources:
+         requests:
+           cpu: "400m"

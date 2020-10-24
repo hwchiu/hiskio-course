@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-anti
+  labels:
+    app: deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: deployment
+  template:
+    metadata:
+      labels:
+        app: deployment
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - web-anti
+            topologyKey: "kubernetes.io/hostname"
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        effect: NoSchedule
+      containers:
+      - name: deployment-server
+        image: hwchiu/netutils 
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-anti
+spec:
+  selector:
+    matchLabels:
+      app: web-anti
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: web-anti
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - deployment-anti
+            topologyKey: "kubernetes.io/hostname"
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        effect: NoSchedule
+      containers:
+      - name: web-app
+        image: nginx:1.16-alpine
