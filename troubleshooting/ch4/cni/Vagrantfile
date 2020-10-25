@@ -1,0 +1,65 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "bento/ubuntu-18.04"
+  config.vm.box_version ='201912.14.0'
+  config.vm.hostname = 'k8s-dev'
+  config.vm.define vm_name = 'k8s'
+
+  config.vm.provision "shell", privileged: false, inline: <<-SHELL
+    set -e -x -u
+    export DEBIAN_FRONTEND=noninteractive
+
+    #change the source.list
+    sudo apt-get update
+    sudo apt-get install -y vim git cmake build-essential tcpdump tig jq socat bash-completion yamllint shellcheck
+    # Install Docker
+    export DOCKER_VERSION="5:19.03.5~3-0~ubuntu-bionic"
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+    sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+    sudo apt-get update
+    sudo apt-get install -y docker-ce=${DOCKER_VERSION}
+    sudo usermod -aG docker $USER
+
+    #Disable swap
+    #https://github.com/kubernetes/kubernetes/issues/53533
+    sudo swapoff -a && sudo sysctl -w vm.swappiness=0
+    sudo sed '/vagrant--vg-swap/d' -i /etc/fstab
+
+    git clone https://github.com/hwchiu/hiskio-course.git
+
+    sudo apt-get update && sudo apt-get install -y apt-transport-https curl
+    curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+    echo "deb http://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee --append /etc/apt/sources.list.d/kubernetes.list
+    sudo apt-get update
+    sudo apt-get install -y kubectl
+
+    curl -Lo ./kind "https://github.com/kubernetes-sigs/kind/releases/download/v0.7.0/kind-$(uname)-amd64"
+    chmod a+x ./kind
+    sudo mv ./kind /usr/local/bin/kind
+
+    sudo kind create cluster --config hiskio-course/troubleshooting/ch4/cni/kind.yaml
+    sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+    git clone --depth=1 https://github.com/Bash-it/bash-it.git ~/.bash_it
+    bash ~/.bash_it/install.sh -s
+
+    echo 'source <(kubectl completion bash)' >> ~/.bashrc
+    set -x; cd "$(mktemp -d)" &&
+    curl -fsSLO "https://github.com/kubernetes-sigs/krew/releases/latest/download/krew.{tar.gz,yaml}" &&
+    tar zxvf krew.tar.gz &&
+    KREW=./krew-"$(uname | tr '[:upper:]' '[:lower:]')_amd64" &&
+    "$KREW" install --manifest=krew.yaml --archive=krew.tar.gz &&
+    "$KREW" update
+    echo 'export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"' >> ~/.bashrc
+
+  SHELL
+
+  config.vm.network :private_network, ip: "172.17.8.111"
+  config.vm.provider :virtualbox do |v|
+      v.customize ["modifyvm", :id, "--cpus", 2]
+      v.customize ["modifyvm", :id, "--memory", 4096]
+      v.customize ['modifyvm', :id, '--nicpromisc1', 'allow-all']
+  end
+end
