@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pod-default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pod-default
+  template:
+    metadata:
+      labels:
+        app: pod-default
+    spec:
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        effect: NoSchedule
+      containers:
+      - name: pod-default-server
+        image: hwchiu/netutils
+      dnsPolicy: Default

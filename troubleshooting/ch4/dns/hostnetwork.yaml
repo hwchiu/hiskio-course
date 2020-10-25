@@ -1,19 +1,21 @@
 apiVersion: apps/v1
-kind: DaemonSet
+kind: Deployment
 metadata:
-  name: debug
+  name: pod-host
 spec:
+  replicas: 1
   selector:
     matchLabels:
-      app: debug
+      app: pod-host
   template:
     metadata:
       labels:
-        app: debug
+        app: pod-host
     spec:
       tolerations:
       - key: node-role.kubernetes.io/master
         effect: NoSchedule
       containers:
-      - name: debug-server
+      - name: pod-host-server
         image: hwchiu/netutils
+      hostNetwrk: true

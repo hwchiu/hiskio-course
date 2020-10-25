@@ -39,7 +39,7 @@ Vagrant.configure("2") do |config|
     chmod a+x ./kind
     sudo mv ./kind /usr/local/bin/kind
 
-    sudo kind create cluster --config hiskio-course/troubleshooting/ch4/ingress/kind.yaml
+    sudo kind create cluster --config hiskio-course/troubleshooting/ch4/dns/kind.yaml
     sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
     git clone --depth=1 https://github.com/Bash-it/bash-it.git ~/.bash_it

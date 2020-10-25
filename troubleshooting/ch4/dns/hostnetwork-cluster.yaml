@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pod-host-cluster
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pod-host-cluster
+  template:
+    metadata:
+      labels:
+        app: pod-host-cluster
+    spec:
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        effect: NoSchedule
+      containers:
+      - name: pod-host-cluster-server
+        image: hwchiu/netutils
+      hostNetwrk: true
+      dnsPolicy: ClusterFirstWithHostNet

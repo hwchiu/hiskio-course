@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pod-clusterfirst
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pod-clusterfirst
+  template:
+    metadata:
+      labels:
+        app: pod-clusterfirst
+    spec:
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        effect: NoSchedule
+      containers:
+      - name: pod-clusterfirst-server
+        image: hwchiu/netutils
+      dnsPolicy: ClusterFirst  
