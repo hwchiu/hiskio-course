@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-example
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: backend-example
+  template:
+    metadata:
+      labels:
+        app: backend-example
+    spec:
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        effect: NoSchedule
+      containers:
+      - name: backend-example-server
+        image: hwchiu/netutils:python-service
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: python
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 8000
+  selector:
+    app: backend-example
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: python-nodeport
+spec:
+  type: NodePort
+  ports:
+  - port: 80
+    targetPort: 8000
+  selector:
+    app: backend-example
+  externalTrafficPolicy: Local

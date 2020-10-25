@@ -46,9 +46,6 @@ Vagrant.configure("2") do |config|
     bash ~/.bash_it/install.sh -s
 
     echo 'source <(kubectl completion bash)' >> ~/.bashrc
-
-    kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.40.2/deploy/static/provider/baremetal/deploy.yaml
-    sudo docker exec kind-worker iptables -t filter -I FORWARD -i eth0 -p tcp --dport 8000  -j DROP
   SHELL
 
   config.vm.network :private_network, ip: "172.17.8.111"
