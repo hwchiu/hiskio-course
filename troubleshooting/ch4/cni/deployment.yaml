@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-default
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: deployment-default
+  template:
+    metadata:
+      labels:
+        app: deployment-default
+    spec:
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        effect: NoSchedule
+      containers:
+      - name: deployment-default-server
+        image: hwchiu/netutils 
