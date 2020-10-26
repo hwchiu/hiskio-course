@@ -18,5 +18,5 @@ spec:
       containers:
       - name: pod-host-cluster-server
         image: hwchiu/netutils
-      hostNetwrk: true
+      hostNetwork: true
       dnsPolicy: ClusterFirstWithHostNet
