@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: memory-empty
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: memory-empty
+  template:
+    metadata:
+      labels:
+        app: memory-empty
+    spec:
+      containers:
+      - image: hwchiu/netutils
+        name: c1
+        volumeMounts:
+          - mountPath: "/c1"
+            name: emptydir-demo
+      - image: hwchiu/netutils
+        name: c2
+        volumeMounts:
+          - mountPath: "/c2"
+            name: emptydir-demo
+      - image: hwchiu/netutils
+        name: c3
+        volumeMounts:
+          - mountPath: "/c3"
+            name: emptydir-demo
+      volumes:
+        - name: emptydir-demo
+          emptyDir:
+            medium: Memory

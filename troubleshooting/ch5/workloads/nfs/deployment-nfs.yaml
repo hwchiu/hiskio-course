@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nfs-volume
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nfs-volume
+  template:
+    metadata:
+      labels:
+        app: nfs-volume
+    spec:
+      containers:
+      - image: hwchiu/netutils
+        name: c1
+        volumeMounts:
+          - mountPath: "/c1"
+            name: emptydir-demo
+      - image: hwchiu/netutils
+        name: c2
+        volumeMounts:
+          - mountPath: "/c2"
+            name: emptydir-demo
+      - image: hwchiu/netutils
+        name: c3
+        volumeMounts:
+          - mountPath: "/c3"
+            name: emptydir-demo
+      volumes:
+        - name: emptydir-demo
+          nfs:
+            server: 172.18.0.1
+            path: "/nfsshare"

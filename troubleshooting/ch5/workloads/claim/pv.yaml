@@ -1,0 +1,59 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: nfs-claimref-demo-1
+spec:
+  storageClassName: pv-demo 
+  capacity:
+    storage: 10Mi
+  accessModes:
+    - ReadWriteOnce
+  nfs:
+    server: 172.18.0.1
+    path: "/nfsshare"
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: nfs-claimref-demo-2
+spec:
+  storageClassName: pv-demo 
+  capacity:
+    storage: 10Mi
+  accessModes:
+    - ReadWriteOnce
+  nfs:
+    server: 172.18.0.1
+    path: "/nfsshare"
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: nfs-claimref-demo-3
+spec:
+  storageClassName: pv-demo 
+  capacity:
+    storage: 10Mi
+  accessModes:
+    - ReadWriteOnce
+  nfs:
+    server: 172.18.0.1
+    path: "/nfsshare"
+    #  claimRef:
+    #      name: nfs-claimref-demo
+    #      namespace: default
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: nfs-claimref-demo-4
+spec:
+  storageClassName: pv-demo 
+  capacity:
+    storage: 10Mi
+  accessModes:
+    - ReadWriteOnce
+  nfs:
+    server: 172.18.0.1
+    path: "/nfsshare"
+---

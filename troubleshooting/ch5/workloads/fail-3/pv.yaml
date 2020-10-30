@@ -1,0 +1,13 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: nfs-mismatch-wihoutsc-demo
+spec:
+  storageClassName: ""
+  capacity:
+    storage: 10Mi
+  accessModes:
+    - ReadWriteOnce
+  nfs:
+    server: 172.18.0.1
+    path: "/nfsshare"

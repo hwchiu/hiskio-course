@@ -1,0 +1,13 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: nfs-ip-demo
+spec:
+  storageClassName: pv-demo 
+  capacity:
+    storage: 10Mi
+  accessModes:
+    - ReadWriteOnce
+  nfs:
+    server: 1.2.3.4
+    path: "/nfsshare"

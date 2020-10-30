@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nfs-mismatch
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nfs-mismatch
+  template:
+    metadata:
+      labels:
+        app: nfs-mismatch
+    spec:
+      containers:
+      - image: hwchiu/netutils
+        name: c1
+        volumeMounts:
+          - mountPath: "/c1"
+            name: nfs-mismatch-demo
+      volumes:
+        - name: nfs-mismatch-demo
+          persistentVolumeClaim:
+            claimName: nfs-mismatch-demo
