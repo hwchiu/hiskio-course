@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: disk-empty
+  name: memory-empty
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: disk-empty
+      app: memory-empty
   template:
     metadata:
       labels:
-        app: disk-empty
+        app: memory-empty
     spec:
       containers:
       - image: hwchiu/netutils
@@ -32,4 +32,3 @@ spec:
         - name: emptydir-demo
           emptyDir:
             medium: Memory
-            

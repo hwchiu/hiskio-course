@@ -40,8 +40,8 @@ spec:
     server: 172.18.0.1
     path: "/nfsshare"
     #  claimRef:
-    #      name: nfs-claimref-demo
-    #      namespace: default
+    #    name: nfs-claimref-demo
+    #    namespace: default
 ---
 kind: PersistentVolume
 apiVersion: v1
