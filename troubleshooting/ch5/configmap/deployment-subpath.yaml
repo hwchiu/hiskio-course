@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: configmap-demo
+  name: config-subpath-demo
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: configmap-demo
+      app: config-subpath-demo
   template:
     metadata:
       labels:
-        app: configmap-demo
+        app: config-subpath-demo
     spec:
       containers:
       - image: hwchiu/netutils
@@ -18,6 +18,15 @@ spec:
         volumeMounts:
           - mountPath: "/config"
             name: config-volume
+          - mountPath: "/json"
+            name: config-volume
+            subPath: json.data
+          - mountPath: "/yaml"
+            name: config-volume
+            subPath: yaml.config
+          - mountPath: "/yaml_two"
+            name: config-volume
+            subPath: hmmm
       volumes:
       - name: config-volume
         configMap:
