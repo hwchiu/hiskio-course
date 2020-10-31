@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config-test
+  namespace: default
+data:
+  version.date: "2020-07-01"
+  yaml.config: |
+    name: hwchiu
+    image: hwchiu/netutils
+    soad: qq
+  json.data: |
+    {
+      "key": {
+         "storage": "yes"
+      }
+    }
