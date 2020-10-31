@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hostpath-sc-pvc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hostpath-sc-pvc
+  template:
+    metadata:
+      labels:
+        app: hostpath-sc-pvc
+    spec:
+      containers:
+      - image: hwchiu/netutils
+        name: c1
+        volumeMounts:
+          - mountPath: "/c1"
+            name: hostpath-demo
+      volumes:
+        - name: hostpath-demo
+          persistentVolumeClaim:
+            claimName: hostpath-sc-demo

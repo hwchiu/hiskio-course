@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hostpath-demo
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: hostpath-demo
+  template:
+    metadata:
+      labels:
+        app: hostpath-demo
+    spec:
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        effect: NoSchedule
+      containers:
+      - image: hwchiu/netutils
+        name: c1
+        volumeMounts:
+          - mountPath: "/config"
+            name: config-volume
+      volumes:
+      - name: config-volume
+        hostPath:
+          path: /data
+          type: DirectoryOrCreate

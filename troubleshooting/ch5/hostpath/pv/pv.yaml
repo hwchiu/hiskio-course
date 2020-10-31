@@ -1,0 +1,13 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: hostpath-demo
+spec:
+  storageClassName: pv-demo 
+  capacity:
+    storage: 10Mi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: /data
+    type: DirectoryOrCreate

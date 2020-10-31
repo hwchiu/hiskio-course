@@ -1,0 +1,20 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: local-demo
+spec:
+  storageClassName: local-storage
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 50Mi
+  local:
+    path: /data
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - kind-worker

@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: local-sc-pvc
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: local-sc-pvc
+  template:
+    metadata:
+      labels:
+        app: local-sc-pvc
+    spec:
+      containers:
+      - image: hwchiu/netutils
+        name: c1
+        volumeMounts:
+          - mountPath: "/c1"
+            name: local-demo
+      volumes:
+        - name: local-demo
+          persistentVolumeClaim:
+            claimName: local-demo
