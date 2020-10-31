@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: empty-fsgroup
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: empty-fsgroup
+  template:
+    metadata:
+      labels:
+        app: empty-fsgroup
+    spec:
+      securityContext:
+        runAsUser: 100
+        runAsGroup:  60
+        fsGroup: 60
+      containers:
+      - image: hwchiu/netutils
+        name: c1
+        volumeMounts:
+          - mountPath: "/c1"
+            name: emptydir-demo
+        securityContext:
+          allowPrivilegeEscalation: false            
+      volumes:
+      - name: emptydir-demo
+        emptyDir: {}

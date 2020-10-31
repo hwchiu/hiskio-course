@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nfs-runas
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nfs-runas
+  template:
+    metadata:
+      labels:
+        app: nfs-runas
+    spec:
+      securityContext:
+        runAsUser: 1001
+        runAsGroup: 1004
+      containers:
+      - image: hwchiu/netutils
+        name: c1
+        volumeMounts:
+          - mountPath: "/c1"
+            name: emptydir-demo
+      volumes:
+        - name: emptydir-demo
+          nfs:
+            server: 172.18.0.1
+            path: "/nfsshare"
