@@ -34,11 +34,13 @@ Vagrant.configure("2") do |config|
     sudo apt-get update
     sudo apt-get install -y kubectl
 
-    wget -q -O - https://raw.githubusercontent.com/rancher/k3d/main/install.sh | bash
+    https://github.com/rancher/k3d/releases/download/v4.2.0/k3d-linux-arm64
+    sudo chmod 755 k3d-linux-arm64
+    sudo mv k3d-linux-arm64 /usr/local/bin/k3d
 
-    sudo k3d cluster create -s 2 -p 8080:80@loadbalancer dev
-    sudo k3d cluster create -s 2 -p 8081:80@loadbalancer stage
-    sudo k3d cluster create -s 2 -p 8082:80@loadbalancer prod
+    sudo k3d cluster create -s 1 -p 8080:80@loadbalancer dev
+    sudo k3d cluster create --network k3d-dev -s 1 -p 8081:80@loadbalancer stage
+    sudo k3d cluster create --network k3d-dev -s 1 -p 8082:80@loadbalancer prod
 
     echo 'source <(kubectl completion bash)' >> ~/.bashrc
     git clone https://github.com/hwchiu/hiskio-gitops-demo-manifest.git
@@ -63,8 +65,8 @@ Vagrant.configure("2") do |config|
 
   config.vm.network :private_network, ip: "172.17.8.111"
   config.vm.provider :virtualbox do |v|
-      v.customize ["modifyvm", :id, "--cpus", 3]
-      v.customize ["modifyvm", :id, "--memory", 4096]
+      v.customize ["modifyvm", :id, "--cpus", 4]
+      v.customize ["modifyvm", :id, "--memory", 8192]
       v.customize ['modifyvm', :id, '--nicpromisc1', 'allow-all']
   end
 end
