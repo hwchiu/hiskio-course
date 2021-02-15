@@ -8,9 +8,7 @@ Vagrant.configure("2") do |config|
   config.vm.define vm_name = 'k8s'
 
   config.vm.provision "shell", privileged: false, inline: <<-SHELL
-    set -e -x -u
-    export DEBIAN_FRONTEND=noninteractive
-
+    set -e -x -u export DEBIAN_FRONTEND=noninteractive 
     #change the source.list
     sudo apt-get update
     sudo apt-get install -y vim git cmake build-essential tcpdump tig jq socat bash-completion yamllint shellcheck
@@ -27,6 +25,7 @@ Vagrant.configure("2") do |config|
     sudo swapoff -a && sudo sysctl -w vm.swappiness=0
     sudo sed '/vagrant--vg-swap/d' -i /etc/fstab
 
+    git clone https://github.com/hwchiu/hiskio-course.git
 
     sudo apt-get update && sudo apt-get install -y apt-transport-https curl
     curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
@@ -34,15 +33,15 @@ Vagrant.configure("2") do |config|
     sudo apt-get update
     sudo apt-get install -y kubectl
 
-    wget -q -O - https://raw.githubusercontent.com/rancher/k3d/main/install.sh | bash
+    https://github.com/rancher/k3d/releases/download/v4.2.0/k3d-linux-arm64
+    sudo chmod 755 k3d-linux-arm64
+    sudo mv k3d-linux-arm64 /usr/local/bin/k3d
 
     sudo k3d cluster create -s 2 -p 8080:80@loadbalancer dev
     sudo k3d cluster create -s 2 -p 8081:80@loadbalancer stage
     sudo k3d cluster create -s 2 -p 8082:80@loadbalancer prod
 
     echo 'source <(kubectl completion bash)' >> ~/.bashrc
-    git clone https://github.com/hwchiu/hiskio-gitops-demo-manifest.git
-    git clone https://github.com/hwchiu/hiskio-gitops-demo.git
 
     git clone --depth=1 https://github.com/Bash-it/bash-it.git ~/.bash_it
     bash ~/.bash_it/install.sh -s
@@ -55,10 +54,7 @@ Vagrant.configure("2") do |config|
     "$KREW" update
     echo 'export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"' >> ~/.bashrc
 
-    curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
     sudo chown vagrant:vagrant ~/.kube/config
-
-
  SHELL
 
   config.vm.network :private_network, ip: "172.17.8.111"
