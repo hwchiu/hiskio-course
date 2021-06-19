@@ -43,6 +43,8 @@ Vagrant.configure("2") do |config|
     sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
     echo 'source <(kubectl completion bash)' >> ~/.bashrc
+    git clone --depth=1 https://github.com/Bash-it/bash-it.git ~/.bash_it
+    bash ~/.bash_it/install.sh -s
 
     set -x; cd "$(mktemp -d)" &&
     curl -fsSLO "https://github.com/kubernetes-sigs/krew/releases/latest/download/krew.{tar.gz,yaml}" &&
@@ -50,10 +52,9 @@ Vagrant.configure("2") do |config|
     KREW=./krew-"$(uname | tr '[:upper:]' '[:lower:]')_amd64" &&
     "$KREW" install --manifest=krew.yaml --archive=krew.tar.gz &&
     "$KREW" update
+
     echo 'export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"' >> ~/.bashrc
 
-    git clone --depth=1 https://github.com/Bash-it/bash-it.git ~/.bash_it
-    bash ~/.bash_it/install.sh -s
   SHELL
 
   config.vm.network :private_network, ip: "172.17.8.111"
