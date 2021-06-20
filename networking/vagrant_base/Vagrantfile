@@ -1,0 +1,38 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "bento/ubuntu-20.04"
+  config.vm.box_version ='202012.21.0'
+  config.vm.hostname = 'network-lab'
+  config.vm.define vm_name = 'net'
+
+  config.vm.provision "shell", privileged: false, inline: <<-SHELL
+    set -e -x -u
+    export DEBIAN_FRONTEND=noninteractive
+
+    #change the source.list
+    sudo apt-get update
+    sudo apt-get install -y vim git cmake build-essential tcpdump tig socat bash-completion
+
+    # Install Docker
+    export DOCKER_VERSION="5:19.03.15~3-0~ubuntu-focal"
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+    sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+    sudo apt-get update
+    sudo apt-get install -y docker-ce=${DOCKER_VERSION}
+    sudo usermod -aG docker $USER
+
+    git clone https://github.com/hwchiu/hiskio-course.git
+
+    git clone --depth=1 https://github.com/Bash-it/bash-it.git ~/.bash_it
+    bash ~/.bash_it/install.sh -s
+  SHELL
+
+  config.vm.network :private_network, ip: "172.17.8.222"
+  config.vm.provider :virtualbox do |v|
+      v.customize ["modifyvm", :id, "--cpus", 2]
+      v.customize ["modifyvm", :id, "--memory", 2048]
+      v.customize ['modifyvm', :id, '--nicpromisc1', 'allow-all']
+  end
+end
