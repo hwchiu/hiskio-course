@@ -14,4 +14,4 @@ Datetime is $(date)
 EOF
 
 #Generate a new index.html under /var/www/html
-exec "$(which nginx)" -c /etc/nginx/nginx.conf -g "daemon off;"
+exec "$(command -v nginx)" -c /etc/nginx/nginx.conf -g "daemon off;"

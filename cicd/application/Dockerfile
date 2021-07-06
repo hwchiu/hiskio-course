@@ -11,5 +11,6 @@ ARG LOG
 ENV COMMITHASH=$HASH
 ENV COMMITLOG=$LOG
 
+WORKDIR /usr/src/app
 COPY entrypoint.sh ./
 ENTRYPOINT ["/bin/bash", "./entrypoint.sh"]
