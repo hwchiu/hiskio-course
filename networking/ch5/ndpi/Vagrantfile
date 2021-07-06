@@ -14,6 +14,7 @@ Vagrant.configure("2") do |config|
     #change the source.list
     sudo apt-get update
     sudo apt-get install -y vim git cmake build-essential tcpdump tig socat bash-completion golang libpcap-dev bridge-utils ipcalc conntrack
+    sudo apt-get install -y bison flex libpcap-dev libtool libtool-bin autoconf pkg-config automake autogen libjson-c-dev libnuma-dev libgcrypt20-dev libpcre2-dev
 
     # Install Docker
     export DOCKER_VERSION="5:19.03.15~3-0~ubuntu-focal"
@@ -32,6 +33,12 @@ Vagrant.configure("2") do |config|
     go get -d github.com/sachaos/tcpterm
     cd go/src/github.com/sachaos/tcpterm/
     go install
+
+    git clone https://github.com/ntop/nDPI.git
+    cd nDPI
+    ./autogen.sh
+    ./configure
+    make
   SHELL
 
   config.vm.network :private_network, ip: "172.17.8.222"
