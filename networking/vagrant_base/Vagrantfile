@@ -30,8 +30,9 @@ Vagrant.configure("2") do |config|
 
     # Install tcpterm
     go get -d github.com/sachaos/tcpterm
-    cd go/src/github.com/sachaos/tcpterm/
+    pushd go/src/github.com/sachaos/tcpterm/
     go install
+    popd
   SHELL
 
   config.vm.network :private_network, ip: "172.17.8.222"
