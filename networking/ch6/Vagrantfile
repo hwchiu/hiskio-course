@@ -1,0 +1,26 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+cluster = {
+  "host1" => { :cpus => 1, :mem => 1024, :ip => "172.18.2.3", :docker_range => "host1_docker.json"},
+  "host2" => { :cpus => 1, :mem => 1024, :ip => "172.18.2.4", :docker_range => "host2_docker.json"},
+}
+
+Vagrant.configure("2") do |config|
+  cluster.each_with_index do |(hostname, info), index|
+    config.vm.define hostname do |cfg|
+      cfg.vm.box = "bento/ubuntu-20.04"
+      cfg.vm.box_version ='202012.21.0'
+      cfg.vm.hostname = hostname
+      cfg.vm.network "private_network", ip: info[:ip]
+      cfg.vm.provision "file", source: info[:docker_range], destination: "/tmp/daemon.json"
+      cfg.vm.provision "shell", privileged: false, path: "provision.sh"
+      cfg.vm.provider :virtualbox do |v|
+        v.customize ["modifyvm", :id, "--cpus", info[:cpus]]
+        v.customize ["modifyvm", :id, "--memory", info[:mem]]
+        v.customize ['modifyvm', :id, '--nicpromisc1', 'allow-all']
+        v.customize ["modifyvm", :id, "--name", hostname]
+      end # end provider
+    end # end config
+  end # end cluster
+end
