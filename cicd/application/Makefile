@@ -22,7 +22,7 @@ yaml-lint:
 
 docker-lint:
 	@echo "---------docker lint----------"
-	docker run --rm -i hadolint/hadolint < Dockerfile;
+	docker run --rm -i -v ${PWD}/.hadolint.yaml:/.config/hadolint.yaml hadolint/hadolint < Dockerfile;
 
 shellcheck:
 	@echo "---------shell check----------"
