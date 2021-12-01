@@ -48,6 +48,9 @@ jobs:
         sudo mv ./minikube /usr/local/bin
 
     - uses: azure/setup-kubectl@v1
+      with:
+        version: '1.21.0'
+      id: install
 
     - name: Install kubernetes
       run:
@@ -89,6 +92,9 @@ jobs:
         sudo mv ./kind /usr/local/bin
 
     - uses: azure/setup-kubectl@v1
+      with:
+        version: '1.21.0'
+      id: install
 
     - name: Install kubernetes
       run: |
