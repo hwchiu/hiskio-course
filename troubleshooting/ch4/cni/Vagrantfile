@@ -46,12 +46,11 @@ Vagrant.configure("2") do |config|
     bash ~/.bash_it/install.sh -s
 
     echo 'source <(kubectl completion bash)' >> ~/.bashrc
+
     set -x; cd "$(mktemp -d)" &&
-    curl -fsSLO "https://github.com/kubernetes-sigs/krew/releases/latest/download/krew.{tar.gz,yaml}" &&
-    tar zxvf krew.tar.gz &&
-    KREW=./krew-"$(uname | tr '[:upper:]' '[:lower:]')_amd64" &&
-    "$KREW" install --manifest=krew.yaml --archive=krew.tar.gz &&
-    "$KREW" update
+    curl -fsSLO "https://github.com/kubernetes-sigs/krew/releases/download/v0.4.2/krew-linux_amd64.tar.gz"
+    tar zxvf krew-linux_amd64.tar.gz &&
+    ./krew-linux_amd64 install krew
     echo 'export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"' >> ~/.bashrc
 
   SHELL
