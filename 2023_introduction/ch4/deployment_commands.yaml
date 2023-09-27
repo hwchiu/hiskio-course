@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: www-deployment-command
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: www-command
+  template:
+    metadata:
+      labels:
+        app: www-command
+    spec:
+      containers:
+        - name: www-server
+          image: hwchiu/python-example
+          command: ["/bin/sh"]
+          args: ["-c", "while true; do echo hello; sleep 10;done"]

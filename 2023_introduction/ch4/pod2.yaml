@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-fail
+spec:
+  containers:
+    - name: www-server
+      image: hwchiu/python-example
+    - name: ubuntu
+      image: hwchiu/haha

@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: load-generator
+  name: load-generator
+spec:
+  containers:
+  - args:
+    - /bin/sh
+    - -c
+    - while sleep 0.01; do wget -q -O- http://php-apache; done
+    image: busybox:1.28
+    imagePullPolicy: IfNotPresent
+    name: load-generator

@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: my-daemonset-taint
+  labels:
+    app: my-app
+spec:
+  selector:
+    matchLabels:
+      app: my-app-taint
+  template:
+    metadata:
+      labels:
+        app: my-app-taint
+    spec:
+      containers:
+      - name: my-container
+        image: hwchiu/python-example
+        ports:
+        - containerPort: 5000
+      tolerations:
+      - key: node-role.kubernetes.io/control-plane
+        operator: Exists
+        effect: NoSchedule

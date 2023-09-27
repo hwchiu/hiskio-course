@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: python-example
+spec:
+  selector:
+    matchLabels:
+      app: python-example
+  serviceName: python-example-service
+  replicas: 6
+  template:
+    metadata:
+      labels:
+        app: python-example
+    spec:
+      containers:
+      - name: python-example
+        image: hwchiu/python-example
+        ports:
+        - containerPort: 5000

@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-crash
+spec:
+  containers:
+    - name: www-server
+      image: hwchiu/python-example
+      command: ['sh', '-c', 'date && no']
