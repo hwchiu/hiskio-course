@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-example2
+spec:
+  containers:
+    - name: www-server
+      image: hwchiu/python-example
+      ports:
+        - containerPort: 5001
+          protocol: "TCP"

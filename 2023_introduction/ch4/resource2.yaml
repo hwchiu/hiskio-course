@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: www-deployment-resource2
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: www-resource2
+  template:
+    metadata:
+      labels:
+        app: www-resource2
+    spec:
+      containers:
+        - name: www-server
+          image: hwchiu/python-example
+          ports:
+            - containerPort: 5000
+              protocol: "TCP"
+          resources:
+            limits:
+              memory: "12Gi"
+              cpu: "500m"
+            requests:
+              memory: "8Gi"
+              cpu: "250m"              

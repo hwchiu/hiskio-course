@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: www-deployment-readiness
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: www-readiness
+  template:
+    metadata:
+      labels:
+        app: www-readiness
+    spec:
+      containers:
+        - name: www-server
+          image: hwchiu/netutils:python
+          ports:
+            - containerPort: 8000
+              name: python-port
+          readinessProbe:
+            httpGet:
+              path: /tmp/haha
+              port: python-port
+            failureThreshold: 3
+            periodSeconds: 2
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: readiness-demo
+spec:
+  selector:
+    app: www-readiness
+  ports:
+  - name: www-readiness
+    port: 8000
+  type: ClusterIP

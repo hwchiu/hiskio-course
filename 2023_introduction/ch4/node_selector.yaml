@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: www-node-selector
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: www-node
+  template:
+    metadata:
+      labels:
+        app: www-node
+    spec:
+      containers:
+        - name: www-server
+          image: hwchiu/python-example
+          ports:
+            - containerPort: 5000
+              protocol: "TCP"
+      nodeSelector:
+        env: test

@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: www-deployment-liveness
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: www-liveness
+  template:
+    metadata:
+      labels:
+        app: www-liveness
+    spec:
+      containers:
+        - name: www-server
+          image: hwchiu/python-example
+          ports:
+            - containerPort: 5000
+              protocol: "TCP"
+          livenessProbe:
+            httpGet:
+              path: /haha
+              port: 5000
+            failureThreshold: 3
+            periodSeconds: 2

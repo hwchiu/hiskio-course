@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: www-deployment-startup
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: www-startup
+  template:
+    metadata:
+      labels:
+        app: www-startup
+    spec:
+      containers:
+        - name: www-server
+          image: hwchiu/python-example
+          ports:
+            - containerPort: 5000
+              protocol: "TCP"
+          startupProbe:
+            httpGet:
+              path: /haha
+              port: 5000
+            failureThreshold: 3
+            periodSeconds: 3
