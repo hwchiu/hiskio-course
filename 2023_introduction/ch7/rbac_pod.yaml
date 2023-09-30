@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: new-debug
+spec:
+  serviceAccountName: read-pod
+  containers:
+    - name: debug
+      image: hwchiu/kubectl-tools:1.20

@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: sc-claim-1
+spec:
+  storageClassName: local-path
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 3Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: task-sc
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: task-sc
+  template:
+    metadata:
+      labels:
+        app: task-sc
+    spec:
+      volumes:
+        - name: task-pv-storage
+          persistentVolumeClaim:
+            claimName: sc-claim-1
+      containers:
+        - name: task-pv-container
+          image: hwchiu/python-example
+          ports:
+            - containerPort: 5000
+              name: "http-server"
+          volumeMounts:
+            - mountPath: "/config"
+              name: task-pv-storage

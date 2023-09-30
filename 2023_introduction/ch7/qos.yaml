@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qos-1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: qos-1
+  template:
+    metadata:
+      labels:
+        app: qos-1
+        demo: qos
+    spec:
+      containers:
+        - name: server-1
+          image: hwchiu/netutils:python
+          resources:
+            limits:
+              cpu: "500m"
+            requests:
+              cpu: "128m"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qos-2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: qos-2
+  template:
+    metadata:
+      labels:
+        app: qos-2
+        demo: qos
+    spec:
+      containers:
+        - name: server-1
+          image: hwchiu/netutils:python
+          resources:
+            limits:
+              cpu: "128m"
+              memory: "64Mi"
+            requests:
+              cpu: "128m"
+              memory: "64Mi"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qos-3
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: qos-3
+  template:
+    metadata:
+      labels:
+        app: qos-3
+        demo: qos
+    spec:
+      containers:
+        - name: server-1
+          image: hwchiu/netutils:python

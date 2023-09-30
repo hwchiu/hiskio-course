@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pdb-demo
+spec:
+  replicas: 10
+  selector:
+    matchLabels:
+      app: pdb-demo
+  template:
+    metadata:
+      labels:
+        app: pdb-demo
+    spec:
+      containers:
+        - name: pdb-demo-server
+          image: hwchiu/python-example
+          ports:
+            - containerPort: 5000
+              protocol: "TCP"
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: pdb-demo
+spec:
+  maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: pdb-demo
+
