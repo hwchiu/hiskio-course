@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: config-demo-1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: config-demo-1
+  template:
+    metadata:
+      labels:
+        app: config-demo-1
+    spec:
+      containers:
+        - name: config-demo-1-server
+          image: hwchiu/python-example
+          ports:
+            - containerPort: 5000
+              protocol: "TCP"
+          env:
+            - name: LOG_LEVEL
+              valueFrom:
+                configMapKeyRef:
+                  name: config-demo
+                  key: LOG_LEVEL
+          volumeMounts:
+          - name: config
+            mountPath: "/config"
+      volumes:
+        - name: config
+          configMap:
+            name: config-demo       
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config-demo
+data:
+  # property-like keys; each key maps to a simple value
+  USE_REDIS: "False2"
+  LOG_LEVEL: "DEBUG2"
+
+  # file-like keys
+  config.yml: |
+    USER_REDIS: "Non-True"
+    REDIS_HOST: "redis2.default"

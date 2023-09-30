@@ -11,6 +11,46 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: server
+            name: ingress-example-server
             port:
               number: 5000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ingress-example-server
+spec:
+  selector:
+    matchLabels:
+      app: ingress-example-server
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: ingress-example-server
+    spec:
+      containers:
+      - name: server
+        image: hwchiu/python-example
+        ports:
+        - containerPort: 5000
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ingress-example-server
+spec:
+  selector:
+    app: ingress-example-server
+  ports:
+  - name: redis
+    port: 5000
+    targetPort: 5000
+  type: ClusterIP

@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hostpath
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hostpath
+  template:
+    metadata:
+      labels:
+        app: hostpath
+    spec:
+      containers:
+        - name: data-viewer
+          image: hwchiu/python-example
+          command: ["/bin/sh"]
+          args: ["-c", "sleep 2; tail -f /config/data.txt"]
+          volumeMounts:
+          - name: cache-volume
+            mountPath: "/config"
+        - name: data-generate
+          image: hwchiu/netutils
+          command: ["/bin/sh", "-c"]
+          args:
+          - |
+            while true; do
+              echo "$(date) - New data entry" >> /data/data.txt
+              sleep 10
+            done
+          volumeMounts:
+          - name: cache-volume
+            mountPath: "/data"
+      volumes:
+        - name: cache-volume
+          hostPath:
+            path: /data
+            type: DirectoryOrCreate

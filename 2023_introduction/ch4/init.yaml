@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: init-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: init
+  template:
+    metadata:
+      labels:
+        app: init
+    spec:
+      initContainers:
+      - name: my-init
+        image: hwchiu/netutils:python
+        command: ['sh', '-c', "until nslookup wait-me; do echo waiting for wait-me service; sleep 2; done"]
+      containers:
+      - name: my-python
+        image: hwchiu/netutils:python

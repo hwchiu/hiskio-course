@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: www-clusterip
+  labels:
+    app: www-clusterip
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: www-clusterip
+  template:
+    metadata:
+      labels:
+        app: www-clusterip
+    spec:
+      containers:
+      - name: my-www
+        image: hwchiu/netutils:python
+        ports:
+          - name: python-port
+            containerPort: 8000
+            protocol: "TCP"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wait-me
+spec:
+  type: ClusterIP
+  selector:
+    app: www-clusterip
+  ports:
+  - name: www-port
+    protocol: TCP
+    port: 80
+    targetPort: python-port
