@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: proxy
+spec:
+  replicas: 3     
+  selector:
+    matchLabels:
+      run: proxy
+  template:
+    metadata:
+      labels:
+        run: proxy
+    spec:
+      containers:
+      - name: app
+        image: hwchiu/netutils
+        command: ["/bin/sh"]
+        args: ["-c", "nc -zv localhost 5000 &&  sleep 1d"]
+      - name: proxy
+        image: hwchiu/python-example
+        ports:
+        - containerPort: 5000
+        startupProbe:
+          httpGet:
+            path: /
+            port: 5000
