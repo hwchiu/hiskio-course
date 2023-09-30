@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: proxy-sidecar
+spec:
+  replicas: 3     
+  selector:
+    matchLabels:
+      run: proxy-sidecar
+  template:
+    metadata:
+      labels:
+        run: proxy-sidecar
+    spec:
+      initContainers:
+      - name: proxy
+        image: hwchiu/python-example
+        ports:
+        - containerPort: 5000
+        restartPolicy: Always
+        startupProbe:
+          httpGet:
+            path: /
+            port: 5000
+      containers:
+      - name: app
+        image: hwchiu/netutils
+        command: ["/bin/sh"]
+        args: ["-c", "nc -zv localhost 5000 &&  sleep 1d"]
