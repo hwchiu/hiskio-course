@@ -1,3 +1,4 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -15,21 +16,18 @@ spec:
       affinity:
         nodeAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 10
-            preference:
-              matchExpressions:
-              - key: "kubernetes.io/hostname"
-                values:
-                - "kind-worker"
-                - "kind-worker2"
-                operator: "In"
-          - weight: 90
-            preference:
-              matchExpressions:
-              - key: "kubernetes.io/hostname"
-                values:
-                - "kind-control-plane"
-                operator: "In"
+            - weight: 10
+              preference:
+                matchExpressions:
+                  - key: kubernetes.io/hostname
+                    values: [kind-worker, kind-worker2]
+                    operator: In
+            - weight: 90
+              preference:
+                matchExpressions:
+                  - key: kubernetes.io/hostname
+                    values: [kind-control-plane]
+                    operator: In
       containers:
         - name: www-server
           image: hwchiu/netutils

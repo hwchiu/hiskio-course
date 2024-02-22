@@ -1,3 +1,4 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -17,8 +18,8 @@ spec:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
               - matchExpressions:
-                - key: "kubernetes.io/hostname"
-                  operator: "Exists"
+                  - key: kubernetes.io/hostname
+                    operator: Exists
       containers:
         - name: www-server
           image: hwchiu/netutils

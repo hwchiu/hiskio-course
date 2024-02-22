@@ -1,3 +1,4 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -17,11 +18,9 @@ spec:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
               - matchExpressions:
-                - key: "kubernetes.io/hostname"
-                  values:
-                  - "kind-worker"
-                  - "kind-worker2"
-                  operator: "In"
+                  - key: kubernetes.io/hostname
+                    values: [kind-worker, kind-worker2]
+                    operator: In
       containers:
         - name: www-server
           image: hwchiu/netutils
