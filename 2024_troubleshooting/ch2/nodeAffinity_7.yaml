@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-affinity7
+spec:
+  replicas: 20
+  selector:
+    matchLabels:
+      app: nodeaffinity7
+  template:
+    metadata:
+      labels:
+        app: nodeaffinity7
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                - key: "kubernetes.io/hostname"
+                  operator: "NotIn"
+                  values:
+                    - "kind-worker2"
+      containers:
+        - name: www-server
+          image: hwchiu/netutils

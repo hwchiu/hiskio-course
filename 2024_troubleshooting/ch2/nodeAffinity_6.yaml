@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-affinity6
+spec:
+  replicas: 20
+  selector:
+    matchLabels:
+      app: nodeaffinity6
+  template:
+    metadata:
+      labels:
+        app: nodeaffinity6
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                - key: "kubernetes.io/hostname"
+                  operator: "Exists"
+      containers:
+        - name: www-server
+          image: hwchiu/netutils
