@@ -1,25 +1,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: node-affinity8
+  name: pod-affinity4
 spec:
-  replicas: 20
+  replicas: 10
   selector:
     matchLabels:
-      app: nodeaffinity8
+      app: podaffinity4
   template:
     metadata:
       labels:
-        app: nodeaffinity8
+        app: podaffinity4
     spec:
       affinity:
-        nodeAffinity:
+        podAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-              - matchExpressions:
-                  - key: kubernetes.io/hostname
+            - labelSelector:
+                matchExpressions:
+                  - key: app
+                    values:
+                      - podaffinity1
                     operator: In
-                    values: [yoyo]
+              topologyKey: role
       containers:
         - name: www-server
           image: hwchiu/netutils

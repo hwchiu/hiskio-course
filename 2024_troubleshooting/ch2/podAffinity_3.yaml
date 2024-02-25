@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pod-affinity3
+spec:
+  replicas: 10
+  selector:
+    matchLabels:
+      app: podaffinity3
+  template:
+    metadata:
+      labels:
+        app: podaffinity3
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app
+                    values:
+                      - podaffinity1
+                    operator: In
+              topologyKey: kubernetes.io/hostname
+      containers:
+        - name: www-server
+          image: hwchiu/netutils
